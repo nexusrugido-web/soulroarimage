@@ -1,4 +1,4 @@
-# SOUL ROAR — BLOG ENGINE v2.8
+# SOUL ROAR — BLOG ENGINE v2.7
 ### Cola o roteiro + as URLs. Sai o HTML pronto.
 
 > Roda em chat SEM memória. Não pergunta nada, não pede confirmação,
@@ -8,20 +8,6 @@
 > A Pergunta Eixo é derivada pelo engine, não é campo de input.
 > O MOTOR DE VARIAÇÃO faz 500 artigos saírem estruturalmente
 > diferentes sem você escolher nada.
->
-> v2.8 — duas falhas reais medidas em produção:
-> (1) LOGO GIGANTE — a regra `.sr-header img { height: 34px; }` sozinha
-> perde pra CSS do tema/Elementor quando ele tem qualquer regra de
-> `img` com especificidade igual ou maior, e o logo renderiza no
-> tamanho nativo do arquivo (às vezes 500px+). §12 atualizado com a
-> regra blindada (`width:auto` + `display:block` + `max-width` +
-> `!important` como rede de segurança) e exemplo pronto pra copiar.
-> (2) FALSO ALARME DE CAMPO FALTANDO — o engine sinalizou "data de
-> publicação" como `[[FALTA]]` mesmo essa nunca tendo sido um campo de
-> input (não está na lista do §1). Data de publicação NÃO é dado que
-> falta — é a data de hoje, sempre. §1 agora lista explicitamente quais
-> campos PODEM virar `[[FALTA]]` e quais NUNCA podem, pra parar de gerar
-> alarme sobre coisa que você nunca precisou enviar.
 >
 > v2.7 — regra nascida de falha real medida em produção: seletor CSS
 > aninhado sem prefixo .sr-root (ex: ".sr-hero cite" em vez de
@@ -60,7 +46,7 @@
                          engine omite a seção Continue Reading)
 ```
 
-### ⚠️ DADOS QUE FALTAM — NUNCA INVENTAR (e o que NÃO entra nessa lista)
+### ⚠️ DADOS QUE FALTAM — NUNCA INVENTAR
 
 ```
 Se algum campo do input não vier (VIDEO ID, duração, URLs de imagem),
@@ -82,39 +68,6 @@ buscável com Ctrl+F. URL inventada não é.
 EXCEÇÃO: se faltar IMAGEM, é melhor entregar o artigo com menos
 imagens do que com imagem quebrada. Reduzir para as que existem e
 registrar no bloco de campos faltando.
-
-──────────────────────────────────────────────────────────────────
-⚠️ LISTA FECHADA — só estes 3 campos podem virar [[FALTA]]:
-
-  1. VIDEO ID
-  2. DURAÇÃO DO VÍDEO
-  3. URLs DE IMAGEM (foto do mestre ou cenas do vídeo)
-
-Se um desses não veio no input, marca. Ponto.
-
-──────────────────────────────────────────────────────────────────
-🚫 NUNCA MARCAR COMO [[FALTA]] — não são campos de input, são
-   derivados automaticamente pelo próprio engine:
-
-  ├── DATA DE PUBLICAÇÃO / dateModified / uploadDate do schema
-  │     → é SEMPRE a data de hoje, no momento em que o artigo está
-  │       sendo gerado. Não é "dado que falta", é fato conhecido.
-  │       Preencher em ISO 8601 direto, sem perguntar e sem marcar.
-  ├── SLUG, TÍTULO SEO, META DESCRIPTION, PERGUNTA EIXO
-  │     → são derivados pelo engine a partir do roteiro (§2, §11).
-  │       Nunca existiram como campo de input, então nunca "faltam".
-  ├── SEEDS / índices do motor de variação (§3)
-  │     → calculados, não fornecidos. Sempre existem se o roteiro
-  │       e o título vieram.
-  └── LEDGER dos últimos 3 artigos, se vier incompleto (1 ou 2 linhas
-        em vez de 3) → NÃO é campo faltando, é só menos conteúdo pra
-        Continue Reading. Usar o que veio. Só usar "LEDGER: none" (e
-        omitir a seção) se realmente não vier nenhuma linha.
-
-REGRA GERAL: antes de marcar [[FALTA: X]], perguntar "X estava na
-lista do §1 como algo que o usuário precisa colar?" Se não estava,
-não é falta — é algo que o próprio engine deveria ter calculado, e a
-saída deve simplesmente calcular, sem alarme e sem pedir desculpa.
 ```
 
 ### Fixos do projeto — nunca mudam, não perguntar
@@ -402,8 +355,7 @@ S4 — FAQ (3 a 4 perguntas; 5 se ARQ5)
 
 S5 — CONTINUE READING
   Os 3 artigos do ledger, com âncora descritiva — nunca "clique aqui".
-  Se LEDGER: none, omitir a seção inteira. Se vier menos de 3 linhas,
-  usar as que vieram — isso não é campo faltando (ver §1).
+  Se LEDGER: none, omitir a seção inteira.
 
 S6 — FECHO (tipo via FIM)
   FIM1 — a definição revirada ("X não é A. É B.")
@@ -455,13 +407,6 @@ POSIÇÕES:
 TODA <img> LEVA: alt descritivo e específico · width e height
 explícitos (evita layout shift) · loading="lazy" e decoding="async"
 em todas menos a primeira visível.
-
-⚠️ EXCEÇÃO — LOGO DO HEADER: para o logo, NÃO usar atributos HTML
-width/height que forcem uma proporção diferente da imagem real (ex:
-width="120" height="34" numa logo que na verdade é quadrada). Isso
-espreme ou, pior, cria conflito com a regra de CSS e o navegador pode
-ignorar os dois. Deixar o <img> do logo SEM width/height no HTML e
-controlar 100% pelo CSS — ver regra blindada em §12.
 
 RITMO: um elemento que quebra o texto a cada ~300 palavras — imagem,
 bloco .beat, tabela, lista ou embed. Nunca dois blocos .beat seguidos
@@ -609,18 +554,14 @@ OPEN GRAPH: og:title, og:description, og:type=article, og:url,
   og:site_name, twitter:card=summary_large_image.
 
 SCHEMA — um <script type="application/ld+json"> no <head> com @graph:
-  1. Article        → headline, description, datePublished (data de
-                      hoje, sempre — ver §1), author (Organization
-                      "Soul Roar"), publisher + logo, mainEntityOfPage,
-                      image
-  2. VideoObject    → name, description, thumbnailUrl, uploadDate
-                      (data de hoje, sempre — ver §1), embedUrl
-                      (youtube.com/embed/ID), duration ISO 8601
+  1. Article        → headline, description, datePublished, author
+                      (Organization "Soul Roar"), publisher + logo,
+                      mainEntityOfPage, image
+  2. VideoObject    → name, description, thumbnailUrl, uploadDate,
+                      embedUrl (youtube.com/embed/ID), duration ISO 8601
   3. FAQPage        → cada pergunta do S4
   4. BreadcrumbList → Home > [Tradição] > [Artigo]
-  Datas em ISO 8601, sempre a data real de hoje. Nunca inventar uma
-  data diferente da real — mas também nunca marcar [[FALTA]] nela,
-  porque "hoje" é sempre um dado conhecido (ver §1).
+  Datas em ISO 8601. Nunca inventar data diferente da real.
 
 ──────────────────────────────────────────────────────────────────
 ⚠️ ONDE CADA CAMPO VAI NA PUBLICAÇÃO (WordPress + Elementor + Rank Math)
@@ -713,40 +654,6 @@ COMPONENTES
 HEADER: usa a IMAGEM da logo (URL nos fixos), altura 34px — não o
   nome em texto.
 
-  ⚠️ REGRA BLINDADA DO LOGO (v2.8 — nasceu de logo saindo gigante em
-  produção). `height` sozinho no CSS NÃO é suficiente: se o tema ou o
-  Elementor tiver qualquer regra própria de `img` com especificidade
-  igual ou maior, ela ganha e o logo renderiza no tamanho nativo do
-  arquivo. Copiar exatamente este padrão, sem editar:
-
-  CSS:
-  ```
-  .sr-root .sr-header {
-    background: var(--black); padding: 16px 20px; text-align: center;
-  }
-  .sr-root .sr-header img {
-    height: 34px !important;
-    width: auto !important;
-    max-width: 160px !important;
-    display: block !important;
-    margin: 0 auto !important;
-  }
-  ```
-  HTML:
-  ```
-  <header class="sr-root sr-header">
-    <a href="https://thesoulroar.com">
-      <img src="[LOGO]" alt="Soul Roar">
-    </a>
-  </header>
-  ```
-  Notar: o `<img>` do logo NÃO leva `width=`/`height=` como atributo
-  HTML. Isso é proposital — atributos HTML de tamanho brigando com o
-  CSS foi exatamente o que causou a falha original. O CSS sozinho, com
-  `!important` como rede de segurança, controla 100% do tamanho.
-  `max-width: 160px` é o teto: mesmo se `height` perder de algum jeito
-  novo e imprevisto, o logo não passa de 160px de largura.
-
 HERO: fundo --black, máx 46vh. Citação em Cormorant itálico, atribuição
   em --amber-lt. Transição para o corpo claro é corte seco, sem
   gradiente — o contraste é o efeito.
@@ -821,9 +728,7 @@ SOBREPOSIÇÃO COM O ROTEIRO — REGRA DAS 8 PALAVRAS (dura):
 ## 14. OUTPUT — NESTA ORDEM, TUDO NUMA RESPOSTA SÓ
 
 ```
-0. CAMPOS FALTANDO (só se algum dos 3 campos da lista fechada do §1
-   realmente não veio — senão OMITIR esta seção inteira, sem
-   "quase-alarmes" sobre data ou outros campos derivados)
+0. CAMPOS FALTANDO (só se houver — senão omitir esta seção)
    ⚠️ substituir antes de publicar: [[FALTA: X]] — aparece em: ___
 
 1. METADATA
@@ -902,11 +807,6 @@ SOBREPOSIÇÃO COM O ROTEIRO — REGRA DAS 8 PALAVRAS (dura):
    │     .sr-toc etc. — é o que garante especificidade suficiente
    │     pra vencer qualquer CSS do tema.
    │
-   ├── PARA ELEMENTOS DE ALTO RISCO (logo, ícones, qualquer <img> que
-   │     apareça em quase todo tema global) — .sr-root sozinho pode
-   │     não bastar mesmo aninhado. Usar `!important` nas propriedades
-   │     de tamanho (`height`, `width`, `max-width`, `display`) como
-   │     reforço. Ver exemplo pronto do logo em §12.
    ├── PROIBIDO estilizar body, html, * ou :root soltos.
    │     ❌ * { box-sizing: border-box; margin: 0; padding: 0; }
    │     ❌ body { background: var(--paper); }
@@ -968,8 +868,7 @@ CONTEÚDO
 [ ] As 4 âncoras P2-P5 presentes como .beat, literais, distribuídas?
 [ ] Prática, tabela, contexto da fonte, FAQ e fecho presentes?
 [ ] 1-2 links externos de autoridade no contexto da fonte?
-[ ] Continue Reading com os links do ledger que vieram (ou omitido se
-    LEDGER: none)?
+[ ] Continue Reading com 3 links (ou omitido se LEDGER none)?
 
 RETENÇÃO
 [ ] Tempo de leitura calculado de verdade?
@@ -981,8 +880,6 @@ RETENÇÃO
 
 TÉCNICO
 [ ] Schema completo no bloco (Article + Video + FAQ + Breadcrumb)?
-[ ] datePublished / uploadDate preenchidos com a data real de hoje,
-    sem marcar [[FALTA]] neles?
 [ ] O bloco NÃO contém <!DOCTYPE>, <html>, <head>, <body>, <title>,
     <meta> nem header/footer do site?
 [ ] Os 4 campos do Rank Math entregues no item 5b?
@@ -992,10 +889,6 @@ TÉCNICO
     seletor antes dela tem .sr-root na frente. Um seletor tipo
     ".sr-hero cite" sem o prefixo é a causa nº1 de texto invisível
     que só aparece depois de publicado no WordPress real.
-[ ] LOGO DO HEADER segue exatamente a regra blindada do §12
-    (height + width:auto + max-width + display:block + !important,
-    e o <img> SEM width/height como atributo HTML)? Essa é a causa
-    nº1 de logo saindo gigante depois de publicado.
 [ ] Retrato do mestre abaixo do H1, máx 180px?
 [ ] 3 a 4 imagens, todas com alt, width, height, lazy (menos a 1ª)?
 [ ] Embed entre 35% e 45%, lazy, com aspect-ratio?
@@ -1022,8 +915,6 @@ INTEGRIDADE
 [ ] Nenhuma promessa de cura, diagnóstico ou resultado garantido —
     derruba aprovação de AdSense em nicho de bem-estar.
 [ ] Público internacional: zero referência cultural brasileira.
-[ ] Nenhum campo fora da lista fechada do §1 foi marcado como
-    [[FALTA]]?
 ```
 
 ---
@@ -1045,4 +936,4 @@ publicação relativa ao histórico do site é sinal monitorado.
 
 ---
 
-_Fim do SOUL ROAR — BLOG ENGINE v2.8_
+_Fim do SOUL ROAR — BLOG ENGINE v2.7_
