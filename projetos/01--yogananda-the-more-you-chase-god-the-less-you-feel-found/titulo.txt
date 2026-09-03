@@ -1,0 +1,26 @@
+TITLE: The More You Chase God The Less You Feel Found
+WORD COUNT: 10
+CHAR COUNT: 46
+ENGINE: LIFE ARC
+ARC: P
+NAMED CONCEPT: The Seeking Trap
+PATTERN: LA-2
+TENSION MECHANISM: 2 (Belief Negation)
+HOOK: You've been told the closer you get to peace, the more you'd feel it. What if the opposite is what actually happens?
+STATE: Stopped in traffic, you realize the destination stopped mattering hours ago.
+POWER PROMISE: The quiet relief of learning that the searching itself was the last thing standing between you and what you wanted.
+FACTUAL_TEACHING: After weeks of striving to reach God through meditation, the narrator asks his guru when he will find Him — and is told he already has. The guru explains that outward longing for "something else" is itself what keeps a person from noticing the joy already present.
+FACTUAL_BOUNDARY:
+  contains: dialogue between Yogananda and Sri Yukteswar; the teaching that desire for external things is a displaced search for God; the idea that He is already found in meditation's joy
+  does NOT contain: any named technique, ritual, or system for "finding" God beyond meditation in general
+SOURCE: Paramahansa Yogananda, "An Experience in Cosmic Consciousness" (Autobiography of a Yogi, Ch. 14)
+MASTER FAME TIER: Recognized
+ANCHOR: The universal experience of chasing a feeling that seems to recede the harder you reach for it.
+REGISTER: R2
+SOURCE LEVEL: 1
+ACCESS LEVEL: Beginner
+PILLAR: 2 (identity and self)
+THUMBNAIL MODE: 2 (dissolution)
+THUMBNAIL TEXT: STOP SEARCHING, START SEEING
+METAPHOR CAT: light and dark
+MANTRA: What you're chasing already found you first.
